@@ -1,7 +1,54 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
+import java.util.*
+import kotlin.system.exitProcess
+import kotlin.text.Charsets.UTF_8
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+
+class Lox {
+    var hadError: Boolean = false
+
+    fun main(args: Array<String>) {
+        if (args.size > 1) {
+            println("Usage: jlox [script]");
+            exitProcess(64);
+        } else if (args.size == 1) {
+            runFile(args[0]);
+        } else {
+            runPrompt();
+        }
+    }
+
+    fun runFile(path: String) {
+        run(File(path).readText(UTF_8))
+        if (hadError) exitProcess(65)
+    }
+
+    fun runPrompt() {
+        val input = InputStreamReader(System.`in`)
+        val reader = BufferedReader(input)
+
+        while (true) {
+            print("> ")
+            val line = reader.readLine() ?: break
+            run(line)
+            hadError = false;
+        }
+    }
+
+    fun run(source: String) {
+        val scanner = Scanner(source)
+        val tokens = scanner.scanTokens()
+
+        for (token in tokens) {
+            println(token)
+        }
+    }
+
+    fun error(line: Int, message: String, where: String) {
+        System.err.println("[line $line] Error$where: $message")
+        hadError = true
+    }
+
 }
