@@ -8,7 +8,7 @@ import kotlin.system.exitProcess
 import kotlin.text.Charsets.UTF_8
 
 
-class Lox {
+object Lox {
     var hadError: Boolean = false
 
     fun main(args: Array<String>) {
@@ -48,7 +48,7 @@ class Lox {
         }
     }
 
-    fun error(line: Int, message: String, where: String) {
+    fun error(line: Int, message: String, where: String = "") {
         System.err.println("[line $line] Error$where: $message")
         hadError = true
     }

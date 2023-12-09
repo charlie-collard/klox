@@ -3,7 +3,7 @@ package com.github.bspammer.klox
 data class Token(
     val tokenType: TokenType,
     val lexeme: String,
-    val literal: Any,
+    val literal: Any?,
     val line: Int,
 ) {
     override fun toString(): String {
