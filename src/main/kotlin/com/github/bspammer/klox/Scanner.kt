@@ -21,29 +21,29 @@ class Scanner(val source: String) {
 
     private fun scanToken() {
         val c = source[current++]
-        when (c) {
-            '(' -> addToken(LEFT_PAREN)
-            ')' -> addToken(RIGHT_PAREN)
-            '{' -> addToken(LEFT_BRACE)
-            '}' -> addToken(RIGHT_BRACE)
-            ',' -> addToken(COMMA)
-            '.' -> addToken(DOT)
-            '-' -> addToken(MINUS)
-            '+' -> addToken(PLUS)
-            ';' -> addToken(SEMICOLON)
-            '*' -> addToken(STAR)
-            '!' -> addToken(if (match('=')) BANG_EQUAL else BANG)
-            '=' -> addToken(if (match('=')) EQUAL_EQUAL else EQUAL)
-            '<' -> addToken(if (match('=')) LESS_EQUAL else LESS)
-            '>' -> addToken(if (match('=')) GREATER_EQUAL else GREATER)
-            '/' -> {
+        when {
+            c == '(' -> addToken(LEFT_PAREN)
+            c == ')' -> addToken(RIGHT_PAREN)
+            c == '{' -> addToken(LEFT_BRACE)
+            c == '}' -> addToken(RIGHT_BRACE)
+            c == ',' -> addToken(COMMA)
+            c == '.' -> addToken(DOT)
+            c == '-' -> addToken(MINUS)
+            c == '+' -> addToken(PLUS)
+            c == ';' -> addToken(SEMICOLON)
+            c == '*' -> addToken(STAR)
+            c == '!' -> addToken(if (match('=')) BANG_EQUAL else BANG)
+            c == '=' -> addToken(if (match('=')) EQUAL_EQUAL else EQUAL)
+            c == '<' -> addToken(if (match('=')) LESS_EQUAL else LESS)
+            c == '>' -> addToken(if (match('=')) GREATER_EQUAL else GREATER)
+            c == '/' -> {
                 if (match('/')) {
                     while (peek() != '\n' && !isAtEnd()) current++;
                 } else {
                     addToken(SLASH)
                 }
             }
-            '"' -> {
+            c == '"' -> {
                 while (peek() != '"' && !isAtEnd()) {
                     if (peek() == '\n') line++
                     current++
@@ -59,7 +59,7 @@ class Scanner(val source: String) {
 
                 addToken(STRING, source.substring(start + 1, current - 1))
             }
-            in '0'..'9' -> {
+            c.isDigit() -> {
                 while (peek().isDigit()) current++
 
                 if (peek() == '.' && peek(1).isDigit()) {
@@ -69,11 +69,33 @@ class Scanner(val source: String) {
 
                 addToken(NUMBER, source.substring(start, current).toDouble())
             }
+            c.isLetter() || c == '_' -> {
+                while (peek().isLetter() || peek() == '_') current++
+                val type = mapOf(
+                    "and" to AND,
+                    "class" to CLASS,
+                    "else" to ELSE,
+                    "false" to FALSE,
+                    "for" to FOR,
+                    "fun" to FUN,
+                    "if" to IF,
+                    "nil" to NIL,
+                    "or" to OR,
+                    "print" to PRINT,
+                    "return" to RETURN,
+                    "super" to SUPER,
+                    "this" to THIS,
+                    "true" to TRUE,
+                    "var" to VAR,
+                    "while" to WHILE,
+                )[source.substring(start, current)] ?: IDENTIFIER
+                addToken(type)
+            }
 
 
-            '\n' -> line++
+            c == '\n' -> line++
             // Ignore whitespace
-            ' ', '\r', '\t' -> {}
+            c == ' ' || c == '\r' || c == '\t' -> {}
             else -> Lox.error(line, "Unexpected character")
         }
     }

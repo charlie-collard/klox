@@ -15,6 +15,7 @@ class ScannerTest {
             !*+-/=<> <= == // operators
             "this is a string"
             0 1.1234 999 56789.456
+            and class else false for fun if nil or print return super this true var while my_identifier orchid
         """.trimIndent())
         val tokens = scanner.scanTokens()
 
@@ -40,7 +41,25 @@ class ScannerTest {
             Token(NUMBER, "1.1234", "1.1234".toDouble(), 5),
             Token(NUMBER, "999", 999.toDouble(), 5),
             Token(NUMBER, "56789.456", "56789.456".toDouble(), 5),
-            Token(EOF, "", null, 5),
+            Token(AND, "and", null, 6),
+            Token(CLASS, "class", null, 6),
+            Token(ELSE, "else", null, 6),
+            Token(FALSE, "false", null, 6),
+            Token(FOR, "for", null, 6),
+            Token(FUN, "fun", null, 6),
+            Token(IF, "if", null, 6),
+            Token(NIL, "nil", null, 6),
+            Token(OR, "or", null, 6),
+            Token(PRINT, "print", null, 6),
+            Token(RETURN, "return", null, 6),
+            Token(SUPER, "super", null, 6),
+            Token(THIS, "this", null, 6),
+            Token(TRUE, "true", null, 6),
+            Token(VAR, "var", null, 6),
+            Token(WHILE, "while", null, 6),
+            Token(IDENTIFIER, "my_identifier", null, 6),
+            Token(IDENTIFIER, "orchid", null, 6),
+            Token(EOF, "", null, 6),
         ))
     }
 }
