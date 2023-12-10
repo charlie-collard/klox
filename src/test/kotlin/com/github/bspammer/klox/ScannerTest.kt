@@ -14,6 +14,7 @@ class ScannerTest {
             (( )){} // grouping stuff
             !*+-/=<> <= == // operators
             "this is a string"
+            0 1.1234 999 56789.456
         """.trimIndent())
         val tokens = scanner.scanTokens()
 
@@ -35,7 +36,11 @@ class ScannerTest {
             Token(LESS_EQUAL, "<=", null, 3),
             Token(EQUAL_EQUAL, "==", null, 3),
             Token(STRING, "\"this is a string\"", "this is a string", 4),
-            Token(EOF, "", null, 4),
+            Token(NUMBER, "0", 0.toDouble(), 5),
+            Token(NUMBER, "1.1234", "1.1234".toDouble(), 5),
+            Token(NUMBER, "999", 999.toDouble(), 5),
+            Token(NUMBER, "56789.456", "56789.456".toDouble(), 5),
+            Token(EOF, "", null, 5),
         ))
     }
 }

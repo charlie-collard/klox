@@ -59,6 +59,16 @@ class Scanner(val source: String) {
 
                 addToken(STRING, source.substring(start + 1, current - 1))
             }
+            in '0'..'9' -> {
+                while (peek().isDigit()) current++
+
+                if (peek() == '.' && peek(1).isDigit()) {
+                    current++
+                    while (peek().isDigit()) current++
+                }
+
+                addToken(NUMBER, source.substring(start, current).toDouble())
+            }
 
 
             '\n' -> line++
@@ -75,8 +85,8 @@ class Scanner(val source: String) {
         return true
     }
 
-    private fun peek(): Char {
-        return if (isAtEnd()) '\u0000' else source[current]
+    private fun peek(ahead: Int = 0): Char {
+        return if (isAtEnd()) '\u0000' else source[current + ahead]
     }
 
     private fun isAtEnd(): Boolean {
