@@ -1,7 +1,6 @@
 package com.github.bspammer.klox
 
 import com.github.bspammer.klox.TokenType.*
-import java.text.BreakIterator
 
 class Scanner(val source: String) {
 
@@ -44,6 +43,24 @@ class Scanner(val source: String) {
                     addToken(SLASH)
                 }
             }
+            '"' -> {
+                while (peek() != '"' && !isAtEnd()) {
+                    if (peek() == '\n') line++
+                    current++
+                }
+
+                if (isAtEnd()) {
+                    Lox.error(line, "Unterminated string.")
+                    return
+                }
+
+                // The closing "
+                current++
+
+                addToken(STRING, source.substring(start + 1, current - 1))
+            }
+
+
             '\n' -> line++
             // Ignore whitespace
             ' ', '\r', '\t' -> {}

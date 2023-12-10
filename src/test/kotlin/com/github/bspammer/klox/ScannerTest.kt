@@ -13,6 +13,7 @@ class ScannerTest {
             // this is a comment
             (( )){} // grouping stuff
             !*+-/=<> <= == // operators
+            "this is a string"
         """.trimIndent())
         val tokens = scanner.scanTokens()
 
@@ -33,7 +34,8 @@ class ScannerTest {
             Token(GREATER, ">", null, 3),
             Token(LESS_EQUAL, "<=", null, 3),
             Token(EQUAL_EQUAL, "==", null, 3),
-            Token(EOF, "", null, 3),
+            Token(STRING, "\"this is a string\"", "this is a string", 4),
+            Token(EOF, "", null, 4),
         ))
     }
 }
