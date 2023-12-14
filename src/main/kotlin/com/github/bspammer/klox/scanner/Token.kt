@@ -1,4 +1,4 @@
-package com.github.bspammer.klox
+package com.github.bspammer.klox.scanner
 
 data class Token(
     val tokenType: TokenType,

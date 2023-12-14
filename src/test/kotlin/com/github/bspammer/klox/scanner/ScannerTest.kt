@@ -1,6 +1,6 @@
-package com.github.bspammer.klox
+package com.github.bspammer.klox.scanner
 
-import com.github.bspammer.klox.TokenType.*
+import com.github.bspammer.klox.scanner.TokenType.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

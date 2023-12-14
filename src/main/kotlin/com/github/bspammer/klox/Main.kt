@@ -1,9 +1,9 @@
 package com.github.bspammer.klox
 
+import com.github.bspammer.klox.scanner.Scanner
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
-import java.util.*
 import kotlin.system.exitProcess
 import kotlin.text.Charsets.UTF_8
 

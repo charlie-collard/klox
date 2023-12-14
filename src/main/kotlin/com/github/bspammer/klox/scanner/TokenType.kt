@@ -1,4 +1,4 @@
-package com.github.bspammer.klox
+package com.github.bspammer.klox.scanner
 
 enum class TokenType {
     // Single-character tokens.

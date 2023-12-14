@@ -1,6 +1,7 @@
-package com.github.bspammer.klox
+package com.github.bspammer.klox.scanner
 
-import com.github.bspammer.klox.TokenType.*
+import com.github.bspammer.klox.Lox
+import com.github.bspammer.klox.scanner.TokenType.*
 
 class Scanner(val source: String) {
 
