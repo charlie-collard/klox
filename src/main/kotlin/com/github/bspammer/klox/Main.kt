@@ -1,6 +1,10 @@
 package com.github.bspammer.klox
 
+import com.github.bspammer.klox.ast.exprToString
+import com.github.bspammer.klox.parser.Parser
 import com.github.bspammer.klox.scanner.Scanner
+import com.github.bspammer.klox.scanner.Token
+import com.github.bspammer.klox.scanner.TokenType.EOF
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -11,7 +15,7 @@ import kotlin.text.Charsets.UTF_8
 object Lox {
     var hadError: Boolean = false
 
-    fun main(args: Array<String>) {
+    fun main(vararg args: String) {
         if (args.size > 1) {
             println("Usage: jlox [script]");
             exitProcess(64);
@@ -40,12 +44,12 @@ object Lox {
     }
 
     fun run(source: String) {
-        val scanner = Scanner(source)
-        val tokens = scanner.scanTokens()
+        val tokens = Scanner(source).scanTokens()
+        val expr = Parser(tokens).parse()
 
-        for (token in tokens) {
-            println(token)
-        }
+        if (hadError) return
+
+        expr?.let { println(exprToString(it)) }
     }
 
     fun error(line: Int, message: String, where: String = "") {
@@ -53,4 +57,16 @@ object Lox {
         hadError = true
     }
 
+    fun error(token: Token, message: String) {
+        if (token.tokenType == EOF) {
+            error(token.line, " at end", message)
+        } else {
+            error(token.line, "at '" + token.lexeme + "'", message)
+        }
+    }
+
+}
+
+fun main(vararg args: String) {
+    Lox.main(*args)
 }
