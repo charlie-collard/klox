@@ -1,6 +1,7 @@
 package com.github.bspammer.klox
 
-import com.github.bspammer.klox.ast.exprToString
+import com.github.bspammer.klox.ast.RuntimeError
+import com.github.bspammer.klox.ast.interpret
 import com.github.bspammer.klox.parser.Parser
 import com.github.bspammer.klox.scanner.Scanner
 import com.github.bspammer.klox.scanner.Token
@@ -14,6 +15,7 @@ import kotlin.text.Charsets.UTF_8
 
 object Lox {
     var hadError: Boolean = false
+    var hadRuntimeError: Boolean = false
 
     fun main(vararg args: String) {
         if (args.size > 1) {
@@ -29,6 +31,7 @@ object Lox {
     fun runFile(path: String) {
         run(File(path).readText(UTF_8))
         if (hadError) exitProcess(65)
+        if (hadRuntimeError) exitProcess(70)
     }
 
     fun runPrompt() {
@@ -39,7 +42,8 @@ object Lox {
             print("> ")
             val line = reader.readLine() ?: break
             run(line)
-            hadError = false;
+            hadError = false
+            hadRuntimeError = false
         }
     }
 
@@ -49,7 +53,7 @@ object Lox {
 
         if (hadError) return
 
-        expr?.let { println(exprToString(it)) }
+        expr?.let { println(interpret(it)) }
     }
 
     fun error(line: Int, message: String, where: String = "") {
@@ -63,6 +67,14 @@ object Lox {
         } else {
             error(token.line, "at '" + token.lexeme + "'", message)
         }
+    }
+
+    fun runtimeError(error: RuntimeError) {
+        println("""
+            ${error.message}
+            [line ${error.token.line}]
+        """.trimIndent())
+        hadRuntimeError = true
     }
 
 }
